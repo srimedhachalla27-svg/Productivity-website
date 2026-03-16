@@ -1,104 +1,103 @@
-/* General */
-body {
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+:root {
+  --color-background: #E4E4DE;
+  --color-primary: #C4C5BA;
+  --color-accent: #595f39;
+  --color-text: #1B1B1B;
+  --color-button: #595f39;
+  --color-button-hover: #454d2f;
+}
+
+* { box-sizing:border-box; margin:0; padding:0; }
+body, html {
+  font-family:'Helvetica Neue', sans-serif;
+  height:100%;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  overflow-x:hidden;
+}
+
+/* Background video overlay */
+#background-video {
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  object-fit: cover;
+  z-index:-1;
+  opacity:0.7;
 }
 
 header {
-  padding: 20px;
-  background: #1e293b;
+  text-align:center;
+  padding:2rem 1rem;
+  background-color: rgba(196,197,186,0.8);
+  backdrop-filter: blur(5px);
+  border-bottom:2px solid var(--color-accent);
 }
+header h1 { font-size:2.5rem; margin-bottom:0.5rem; }
+header p { font-size:1.2rem; color: var(--color-accent); }
 
-header h1 {
-  margin: 0;
-  font-size: 2.2em;
-}
-
-header p {
-  margin: 5px 0 0;
-  font-size: 1em;
-  color: #facc15;
-}
-
-/* Sections */
-.dashboard {
-  max-width: 600px;
-  margin: 20px auto;
+main {
+  max-width:900px;
+  margin:2rem auto;
+  padding:0 1rem;
 }
 
 section {
-  background: #1e293b;
-  margin: 15px;
-  padding: 15px;
-  border-radius: 12px;
+  background: rgba(255,255,255,0.85);
+  padding:2rem;
+  margin-bottom:2rem;
+  border-radius:12px;
+  box-shadow:0 4px 10px rgba(0,0,0,0.08);
 }
 
-/* Buttons */
+h2 { color: var(--color-accent); margin-bottom:1rem; font-size:1.8rem; }
+
+ul { list-style:none; margin-bottom:1rem; }
+ul li {
+  padding:0.8rem 1rem;
+  margin-bottom:0.5rem;
+  background: var(--color-primary);
+  color: var(--color-text);
+  border-radius:8px;
+  cursor:pointer;
+  transition:0.2s;
+}
+ul li:hover { background: var(--color-accent); color:#fff; }
+
+input[type="text"], textarea {
+  width:100%;
+  padding:0.8rem;
+  margin-bottom:0.5rem;
+  border-radius:8px;
+  border:1px solid var(--color-accent);
+  font-size:1rem;
+}
+
+textarea { resize: vertical; padding:1rem; }
+
 button {
-  padding: 10px 20px;
-  margin: 5px;
-  border: none;
-  background: #2563eb;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
+  padding:0.8rem 1.5rem;
+  border:none;
+  border-radius:8px;
+  background-color: var(--color-button);
+  color:#fff;
+  cursor:pointer;
+  font-size:1rem;
+  transition:0.2s;
+  margin-top:0.5rem;
+  margin-right:0.5rem;
+}
+button:hover { background-color: var(--color-button-hover); }
+
+footer {
+  text-align:center;
+  padding:1.5rem;
+  background: var(--color-primary);
+  color: var(--color-accent);
+  font-size:0.9rem;
+  border-top:2px solid var(--color-accent);
+  margin-top:3rem;
 }
 
-button:hover {
-  background: #1e40af;
-}
-
-/* Progress bar */
-.progress-bar {
-  background: #111827;
-  height: 20px;
-  border-radius: 10px;
-  margin-top: 10px;
-  width: 100%;
-}
-
-.progress {
-  background: #facc15;
-  height: 100%;
-  width: 0%;
-  border-radius: 10px;
-  transition: width 1s;
-}
-
-/* Flight animation */
-.flight-animation {
-  margin-top: 20px;
-  height: 50px;
-  position: relative;
-  overflow: hidden;
-}
-
-#plane {
-  position: absolute;
-  left: 0;
-  font-size: 2em;
-  transition: left 1s;
-}
-
-/* Travel cards */
-#cards-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-body {
-  background-image: url('magicstudio-art.jpg'); /* use your uploaded image */
-  background-size: cover;       /* makes it cover the entire screen */
-  background-position: center;  /* center the image */
-  background-repeat: no-repeat;
-  font-family: 'Arial', sans-serif;
-  color: #ffffff;               /* text color for readability */
-  margin: 0;
-  padding: 0;
-}
+/* Timer display */
+#timer-display { font-size:2rem; margin-top:0.5rem; font-weight:bold; text-align:center; }
