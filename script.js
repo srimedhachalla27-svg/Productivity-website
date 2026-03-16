@@ -1,4 +1,4 @@
-// ======= Mood Selector =======
+// ===== Mood Selector =====
 const moodSelector = document.getElementById('mood-selector');
 const video = document.getElementById('background-video');
 const videoSource = video.querySelector("source");
@@ -14,16 +14,20 @@ const moods = {
 moodSelector.addEventListener('change', () => {
   const mood = moods[moodSelector.value];
 
+  // Change video
   videoSource.src = mood.video;
   video.load();
   video.play();
 
+  // Change music
   music.src = mood.music;
   music.play();
 });
-// ======= Tasks =======
+
+// ===== Tasks =====
 const taskList = document.getElementById('task-list');
 const taskInput = document.getElementById('new-task');
+const addTaskBtn = document.getElementById('add-task-btn');
 
 function loadTasks() {
   const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
@@ -31,35 +35,55 @@ function loadTasks() {
   tasks.forEach(task => {
     const li = document.createElement('li');
     li.textContent = task;
-    li.onclick = () => { li.style.textDecoration = li.style.textDecoration === 'line-through' ? 'none' : 'line-through'; };
+    li.onclick = () => { 
+      li.style.textDecoration = li.style.textDecoration === 'line-through' ? 'none' : 'line-through'; 
+    };
     taskList.appendChild(li);
   });
 }
 
 function addTask() {
   const taskText = taskInput.value.trim();
-  if(taskText !== '') {
-    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    tasks.push(taskText);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    taskInput.value = '';
-    loadTasks();
-  }
+  if(!taskText) return;
+  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+  tasks.push(taskText);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  taskInput.value = '';
+  loadTasks();
 }
 
+addTaskBtn.addEventListener('click', addTask);
 loadTasks();
 
-// ======= Notes =======
+// ===== Notes =====
 const notesArea = document.getElementById('notes-area');
-function saveNotes() {
+const saveNotesBtn = document.getElementById('save-notes-btn');
+notesArea.value = localStorage.getItem('notes') || '';
+saveNotesBtn.addEventListener('click', () => {
   localStorage.setItem('notes', notesArea.value);
   alert('Notes saved!');
-}
-notesArea.value = localStorage.getItem('notes') || '';
+});
 
-// ======= Timer =======
+// ===== Timer =====
 let timerInterval;
 let remainingTime = 0;
+
+const timerDisplay = document.getElementById('timer-display');
+const startBtn = document.getElementById('start-timer-btn');
+const pauseBtn = document.getElementById('pause-timer-btn');
+const resetBtn = document.getElementById('reset-timer-btn');
+
+function updateTimer() {
+  if(remainingTime <= 0) {
+    clearInterval(timerInterval);
+    timerDisplay.textContent = "00:00";
+    return;
+  }
+  const minutes = String(Math.floor(remainingTime/60)).padStart(2,'0');
+  const seconds = String(remainingTime % 60).padStart(2,'0');
+  timerDisplay.textContent = `${minutes}:${seconds}`;
+  remainingTime--;
+}
 
 function startTimer() {
   const minutes = parseInt(document.getElementById('timer-minutes').value);
@@ -71,21 +95,8 @@ function startTimer() {
 }
 
 function pauseTimer() { clearInterval(timerInterval); }
+function resetTimer() { remainingTime=0; clearInterval(timerInterval); timerDisplay.textContent="00:00"; }
 
-function resetTimer() {
-  clearInterval(timerInterval);
-  remainingTime = 0;
-  document.getElementById('timer-display').textContent = '00:00';
-}
-
-function updateTimer() {
-  if(remainingTime <= 0){
-    clearInterval(timerInterval);
-    document.getElementById('timer-display').textContent = '00:00';
-    return;
-  }
-  const minutes = Math.floor(remainingTime/60).toString().padStart(2,'0');
-  const seconds = (remainingTime % 60).toString().padStart(2,'0');
-  document.getElementById('timer-display').textContent = `${minutes}:${seconds}`;
-  remainingTime--;
-}
+startBtn.addEventListener('click', startTimer);
+pauseBtn.addEventListener('click', pauseTimer);
+resetBtn.addEventListener('click', resetTimer);
