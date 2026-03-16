@@ -2,54 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Focus Flights</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cozy Productivity Hub</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+  <!-- Background Video -->
+  <video id="background-video" autoplay muted loop>
+    <source src="assets/cozy.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <!-- Background Music -->
+  <audio id="bg-music" loop autoplay>
+    <source src="assets/cozy.mp3" type="audio/mp3">
+  </audio>
+
   <header>
-    <h1>Focus Flights ✈️</h1>
-    <p>Generate focus energy to power anti-gravity travel!</p>
+    <h1>Cozy Productivity Hub</h1>
+    <p>Focus, track tasks, and stay productive</p>
   </header>
 
-  <main class="dashboard">
+  <main>
+    <!-- Mood selector -->
+    <section>
+      <h2>Select Your Mood</h2>
+      <select id="mood-selector">
+        <option value="cozy">Cozy</option>
+        <option value="focus">Focused</option>
+        <option value="relaxed">Relaxed</option>
+        <option value="energetic">Energetic</option>
+      </select>
+      <p>Background video and music will change according to your mood.</p>
+    </section>
 
-    <!-- Next Destination -->
-    <section class="destination">
-      <h2>Next Destination</h2>
-      <p id="destination-name">Tokyo, Japan</p>
-      <div class="progress-bar">
-        <div class="progress" id="progress"></div>
+    <!-- Tasks -->
+    <section id="tasks">
+      <h2>Task List</h2>
+      <ul id="task-list"></ul>
+      <input type="text" id="new-task" placeholder="Add a new task...">
+      <button onclick="addTask()">Add Task</button>
+    </section>
+
+    <!-- Notes -->
+    <section id="notes">
+      <h2>Quick Notes</h2>
+      <textarea id="notes-area" placeholder="Write your notes here..."></textarea>
+      <button onclick="saveNotes()">Save Notes</button>
+    </section>
+
+    <!-- Timer -->
+    <section id="timer-section">
+      <h2>Focus Timer</h2>
+      <div>
+        <input type="number" id="timer-minutes" placeholder="Minutes" min="1" style="width:100px;">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
       </div>
+      <div id="timer-display">00:00</div>
     </section>
-
-    <!-- Focus Session -->
-    <section class="focus-session">
-      <h2>Start Focus Flight</h2>
-      <button onclick="startFocus(25)">25 min</button>
-      <button onclick="startFocus(50)">50 min</button>
-      <button onclick="startFocus(90)">90 min</button>
-    </section>
-
-    <!-- Stats -->
-    <section class="stats">
-      <h2>Today's Stats</h2>
-      <p id="sessions">Sessions: 0</p>
-      <p id="miles">Miles Earned: 0</p>
-    </section>
-
-    <!-- Flight Animation -->
-    <section class="flight-animation">
-      <div id="plane">✈️</div>
-    </section>
-
-    <!-- Placeholder for travel cards -->
-    <section class="travel-cards">
-      <h2>Unlocked Cards</h2>
-      <div id="cards-container">No cards yet</div>
-    </section>
-
   </main>
 
-  <script src="app.js"></script>
+  <footer>
+    &copy; 2026 Cozy Productivity Hub
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
