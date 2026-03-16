@@ -100,3 +100,18 @@ function resetTimer() { remainingTime=0; clearInterval(timerInterval); timerDisp
 startBtn.addEventListener('click', startTimer);
 pauseBtn.addEventListener('click', pauseTimer);
 resetBtn.addEventListener('click', resetTimer);
+
+// ===== Music Toggle =====
+const musicToggleBtn = document.getElementById('music-toggle');
+let musicPlaying = true;
+
+musicToggleBtn.addEventListener('click', () => {
+  if(musicPlaying){
+    music.pause();
+    musicToggleBtn.textContent = 'Play Music';
+  } else {
+    music.play();
+    musicToggleBtn.textContent = 'Pause Music';
+  }
+  musicPlaying = !musicPlaying;
+});
