@@ -7,19 +7,17 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- Music Control -->
-<section>
-  <h2>Music Control</h2>
-  <button id="music-toggle">Pause Music</button>
-</section>
-  
+
   <!-- Background Video -->
-  <video id="background-video" autoplay muted loop playsinline>
+  <video id="background-video" autoplay muted loop>
     <source src="assets/cozy.mp4" type="video/mp4">
+    Your browser does not support the video tag.
   </video>
 
   <!-- Background Music -->
-  <audio id="bg-music" autoplay loop></audio>
+  <audio id="bg-music" loop autoplay>
+    <source src="assets/cozy.mp3" type="audio/mp3">
+  </audio>
 
   <header>
     <h1>Cozy Productivity Hub</h1>
@@ -36,32 +34,38 @@
         <option value="relaxed">Relaxed</option>
         <option value="energetic">Energetic</option>
       </select>
-      <p>Background video and music will change according to your mood.</p>
+      <p>Background video, music, and colors change with your mood.</p>
     </section>
 
-    <!-- Task List -->
+    <!-- Music Control -->
+    <section>
+      <h2>Music Control</h2>
+      <button id="music-toggle">Pause Music</button>
+    </section>
+
+    <!-- Tasks -->
     <section id="tasks">
       <h2>Task List</h2>
       <ul id="task-list"></ul>
       <input type="text" id="new-task" placeholder="Add a new task...">
-      <button id="add-task-btn">Add Task</button>
+      <button onclick="addTask()">Add Task</button>
     </section>
 
     <!-- Notes -->
     <section id="notes">
       <h2>Quick Notes</h2>
       <textarea id="notes-area" placeholder="Write your notes here..."></textarea>
-      <button id="save-notes-btn">Save Notes</button>
+      <button onclick="saveNotes()">Save Notes</button>
     </section>
 
-    <!-- Focus Timer -->
+    <!-- Timer -->
     <section id="timer-section">
       <h2>Focus Timer</h2>
       <div>
-        <input type="number" id="timer-minutes" placeholder="Minutes" min="1">
-        <button id="start-timer-btn">Start</button>
-        <button id="pause-timer-btn">Pause</button>
-        <button id="reset-timer-btn">Reset</button>
+        <input type="number" id="timer-minutes" placeholder="Minutes" min="1" style="width:100px;">
+        <button onclick="startTimer()">Start</button>
+        <button onclick="pauseTimer()">Pause</button>
+        <button onclick="resetTimer()">Reset</button>
       </div>
       <div id="timer-display">00:00</div>
     </section>
