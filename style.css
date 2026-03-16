@@ -1,0 +1,94 @@
+/* General */
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+header {
+  padding: 20px;
+  background: #1e293b;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.2em;
+}
+
+header p {
+  margin: 5px 0 0;
+  font-size: 1em;
+  color: #facc15;
+}
+
+/* Sections */
+.dashboard {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+section {
+  background: #1e293b;
+  margin: 15px;
+  padding: 15px;
+  border-radius: 12px;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  background: #2563eb;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1e40af;
+}
+
+/* Progress bar */
+.progress-bar {
+  background: #111827;
+  height: 20px;
+  border-radius: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+
+.progress {
+  background: #facc15;
+  height: 100%;
+  width: 0%;
+  border-radius: 10px;
+  transition: width 1s;
+}
+
+/* Flight animation */
+.flight-animation {
+  margin-top: 20px;
+  height: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+#plane {
+  position: absolute;
+  left: 0;
+  font-size: 2em;
+  transition: left 1s;
+}
+
+/* Travel cards */
+#cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+}
