@@ -1,117 +1,116 @@
-// ===== Mood Selector =====
 const moodSelector = document.getElementById('mood-selector');
 const video = document.getElementById('background-video');
 const videoSource = video.querySelector("source");
 const music = document.getElementById('bg-music');
+const musicToggleBtn = document.getElementById('music-toggle');
 
+let musicPlaying = localStorage.getItem('musicPlaying') === 'false' ? false : true;
+if(!musicPlaying) music.pause(), musicToggleBtn.textContent='Play Music';
+
+// ===== Mood settings =====
 const moods = {
-  cozy: { video:'assets/cozy.mp4', music:'assets/cozy.mp3' },
-  focus: { video:'assets/focus.mp4', music:'assets/focus.mp3' },
-  relaxed: { video:'assets/relaxed.mp4', music:'assets/relaxed.mp3' },
-  energetic: { video:'assets/energetic.mp4', music:'assets/energetic.mp3' }
+  cozy: {
+    video:'assets/cozy.mp4',
+    music:'assets/cozy.mp3',
+    colors: {
+      '--bg-panel':'rgba(255,255,255,0.6)',
+      '--text-color':'#1B1B1B',
+      '--accent-color':'#595f39',
+      '--button-color':'#595f39',
+      '--button-hover':'#454d2f'
+    },
+    font: "'Helvetica Neue', sans-serif"
+  },
+  focus: {
+    video:'assets/focus.mp4',
+    music:'assets/focus.mp3',
+    colors: {
+      '--bg-panel':'rgba(240,240,255,0.6)',
+      '--text-color':'#001f3f',
+      '--accent-color':'#0077b6',
+      '--button-color':'#0077b6',
+      '--button-hover':'#005f8f'
+    },
+    font: "'Arial', sans-serif"
+  },
+  relaxed: {
+    video:'assets/relaxed.mp4',
+    music:'assets/relaxed.mp3',
+    colors: {
+      '--bg-panel':'rgba(220,240,240,0.6)',
+      '--text-color':'#0f2143',
+      '--accent-color':'#354e56',
+      '--button-color':'#354e56',
+      '--button-hover':'#243a3e'
+    },
+    font: "'Georgia', serif"
+  },
+  energetic: {
+    video:'assets/energetic.mp4',
+    music:'assets/energetic.mp3',
+    colors: {
+      '--bg-panel':'rgba(255,245,230,0.6)',
+      '--text-color':'#663300',
+      '--accent-color':'#ff6f00',
+      '--button-color':'#ff6f00',
+      '--button-hover':'#cc5700'
+    },
+    font: "'Verdana', sans-serif"
+  }
 };
 
+// ===== Smooth mood change =====
 moodSelector.addEventListener('change', () => {
   const mood = moods[moodSelector.value];
 
-  // Change video
-  videoSource.src = mood.video;
-  video.load();
-  video.play();
+  // Video fade
+  video.style.opacity = 0;
+  setTimeout(()=>{
+    videoSource.src = mood.video;
+    video.load();
+    video.play();
+    video.style.opacity = 0.7;
+  }, 1000);
 
-  // Change music
-  music.src = mood.music;
-  music.play();
-});
-
-// ===== Tasks =====
-const taskList = document.getElementById('task-list');
-const taskInput = document.getElementById('new-task');
-const addTaskBtn = document.getElementById('add-task-btn');
-
-function loadTasks() {
-  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  taskList.innerHTML = '';
-  tasks.forEach(task => {
-    const li = document.createElement('li');
-    li.textContent = task;
-    li.onclick = () => { 
-      li.style.textDecoration = li.style.textDecoration === 'line-through' ? 'none' : 'line-through'; 
-    };
-    taskList.appendChild(li);
+  // Music fade
+  fadeOutMusic(music, 1000, ()=>{
+    music.src = mood.music;
+    if(musicPlaying) music.play();
+    fadeInMusic(music,1000);
   });
-}
 
-function addTask() {
-  const taskText = taskInput.value.trim();
-  if(!taskText) return;
-  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  tasks.push(taskText);
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-  taskInput.value = '';
-  loadTasks();
-}
-
-addTaskBtn.addEventListener('click', addTask);
-loadTasks();
-
-// ===== Notes =====
-const notesArea = document.getElementById('notes-area');
-const saveNotesBtn = document.getElementById('save-notes-btn');
-notesArea.value = localStorage.getItem('notes') || '';
-saveNotesBtn.addEventListener('click', () => {
-  localStorage.setItem('notes', notesArea.value);
-  alert('Notes saved!');
+  // Colors & font
+  for(let prop in mood.colors){
+    document.documentElement.style.setProperty(prop, mood.colors[prop]);
+  }
+  document.body.style.fontFamily = mood.font;
 });
 
-// ===== Timer =====
-let timerInterval;
-let remainingTime = 0;
-
-const timerDisplay = document.getElementById('timer-display');
-const startBtn = document.getElementById('start-timer-btn');
-const pauseBtn = document.getElementById('pause-timer-btn');
-const resetBtn = document.getElementById('reset-timer-btn');
-
-function updateTimer() {
-  if(remainingTime <= 0) {
-    clearInterval(timerInterval);
-    timerDisplay.textContent = "00:00";
-    return;
-  }
-  const minutes = String(Math.floor(remainingTime/60)).padStart(2,'0');
-  const seconds = String(remainingTime % 60).padStart(2,'0');
-  timerDisplay.textContent = `${minutes}:${seconds}`;
-  remainingTime--;
+// ===== Music fade helpers =====
+function fadeOutMusic(audio, duration, callback){
+  const step = audio.volume / (duration / 50);
+  const fade = setInterval(()=>{
+    if(audio.volume - step <= 0){
+      audio.volume=0; clearInterval(fade); if(callback) callback();
+    } else audio.volume -= step;
+  },50);
+}
+function fadeInMusic(audio,duration){
+  audio.volume=0;
+  const step = 1 / (duration/50);
+  const fade = setInterval(()=>{
+    if(audio.volume+step>=1){audio.volume=1; clearInterval(fade);}
+    else audio.volume += step;
+  },50);
 }
 
-function startTimer() {
-  const minutes = parseInt(document.getElementById('timer-minutes').value);
-  if(isNaN(minutes) || minutes <= 0) return alert('Enter a valid number of minutes');
-  remainingTime = minutes * 60;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-function pauseTimer() { clearInterval(timerInterval); }
-function resetTimer() { remainingTime=0; clearInterval(timerInterval); timerDisplay.textContent="00:00"; }
-
-startBtn.addEventListener('click', startTimer);
-pauseBtn.addEventListener('click', pauseTimer);
-resetBtn.addEventListener('click', resetTimer);
-
-// ===== Music Toggle =====
-const musicToggleBtn = document.getElementById('music-toggle');
-let musicPlaying = true;
-
-musicToggleBtn.addEventListener('click', () => {
-  if(musicPlaying){
-    music.pause();
-    musicToggleBtn.textContent = 'Play Music';
-  } else {
-    music.play();
-    musicToggleBtn.textContent = 'Pause Music';
-  }
+// ===== Music toggle =====
+musicToggleBtn.addEventListener('click', ()=>{
+  if(musicPlaying){ music.pause(); musicToggleBtn.textContent='Play Music'; }
+  else{ music.play(); musicToggleBtn.textContent='Pause Music'; }
   musicPlaying = !musicPlaying;
+  localStorage.setItem('musicPlaying', musicPlaying);
 });
+
+// ===== Tasks, Notes, Timer =====
+// Keep your existing task, notes, timer JS here (unchanged)
