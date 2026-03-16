@@ -1,13 +1,25 @@
+// ====== ELEMENTS ======
 const moodSelector = document.getElementById('mood-selector');
 const video = document.getElementById('background-video');
-const videoSource = video.querySelector("source");
+const videoSource = video.querySelector('source');
 const music = document.getElementById('bg-music');
 const musicToggleBtn = document.getElementById('music-toggle');
+const headerTitle = document.querySelector('header h1');
+const headerSubtitle = document.querySelector('header p');
 
-let musicPlaying = localStorage.getItem('musicPlaying') === 'false' ? false : true;
-if(!musicPlaying) music.pause(), musicToggleBtn.textContent='Play Music';
+const taskList = document.getElementById('task-list');
+const taskInput = document.getElementById('new-task');
+const notesArea = document.getElementById('notes-area');
+const timerDisplay = document.getElementById('timer-display');
 
-// ===== Mood settings =====
+let musicPlaying = localStorage.getItem('musicPlaying') !== 'false'; // default true
+
+if (!musicPlaying) {
+  music.pause();
+  musicToggleBtn.textContent = 'Play Music';
+}
+
+// ====== MOOD SETTINGS ======
 const moods = {
   cozy: {
     video:'assets/cozy.mp4',
@@ -19,7 +31,9 @@ const moods = {
       '--button-color':'#595f39',
       '--button-hover':'#454d2f'
     },
-    font: "'Helvetica Neue', sans-serif"
+    font: "'Helvetica Neue', sans-serif",
+    headerText: "Cozy vibes for deep focus 🔥",
+    subtitle: "Relax and stay productive"
   },
   focus: {
     video:'assets/focus.mp4',
@@ -31,7 +45,9 @@ const moods = {
       '--button-color':'#0077b6',
       '--button-hover':'#005f8f'
     },
-    font: "'Arial', sans-serif"
+    font: "'Arial', sans-serif",
+    headerText: "Stay Focused 🎯",
+    subtitle: "Your productivity companion"
   },
   relaxed: {
     video:'assets/relaxed.mp4',
@@ -43,7 +59,9 @@ const moods = {
       '--button-color':'#354e56',
       '--button-hover':'#243a3e'
     },
-    font: "'Georgia', serif"
+    font: "'Georgia', serif",
+    headerText: "Relax and Refresh 🌿",
+    subtitle: "Take it slow, stay productive"
   },
   energetic: {
     video:'assets/energetic.mp4',
@@ -55,11 +73,13 @@ const moods = {
       '--button-color':'#ff6f00',
       '--button-hover':'#cc5700'
     },
-    font: "'Verdana', sans-serif"
+    font: "'Verdana', sans-serif",
+    headerText: "Get Energetic ⚡",
+    subtitle: "Boost your energy and productivity"
   }
 };
 
-// ===== Smooth mood change =====
+// ====== MOOD CHANGE ======
 moodSelector.addEventListener('change', () => {
   const mood = moods[moodSelector.value];
 
@@ -70,13 +90,13 @@ moodSelector.addEventListener('change', () => {
     video.load();
     video.play();
     video.style.opacity = 0.7;
-  }, 1000);
+  }, 500);
 
   // Music fade
-  fadeOutMusic(music, 1000, ()=>{
+  fadeOutMusic(music, 500, ()=>{
     music.src = mood.music;
     if(musicPlaying) music.play();
-    fadeInMusic(music,1000);
+    fadeInMusic(music, 500);
   });
 
   // Colors & font
@@ -84,33 +104,142 @@ moodSelector.addEventListener('change', () => {
     document.documentElement.style.setProperty(prop, mood.colors[prop]);
   }
   document.body.style.fontFamily = mood.font;
+
+  // Header text
+  headerTitle.textContent = mood.headerText;
+  headerSubtitle.textContent = mood.subtitle;
 });
 
-// ===== Music fade helpers =====
+// ====== MUSIC FADE HELPERS ======
 function fadeOutMusic(audio, duration, callback){
   const step = audio.volume / (duration / 50);
   const fade = setInterval(()=>{
     if(audio.volume - step <= 0){
-      audio.volume=0; clearInterval(fade); if(callback) callback();
+      audio.volume = 0;
+      clearInterval(fade);
+      if(callback) callback();
     } else audio.volume -= step;
   },50);
 }
-function fadeInMusic(audio,duration){
-  audio.volume=0;
-  const step = 1 / (duration/50);
+
+function fadeInMusic(audio, duration){
+  audio.volume = 0;
+  const step = 1 / (duration / 50);
   const fade = setInterval(()=>{
-    if(audio.volume+step>=1){audio.volume=1; clearInterval(fade);}
-    else audio.volume += step;
+    if(audio.volume + step >= 1){
+      audio.volume = 1;
+      clearInterval(fade);
+    } else audio.volume += step;
   },50);
 }
 
-// ===== Music toggle =====
+// ====== MUSIC TOGGLE ======
 musicToggleBtn.addEventListener('click', ()=>{
-  if(musicPlaying){ music.pause(); musicToggleBtn.textContent='Play Music'; }
-  else{ music.play(); musicToggleBtn.textContent='Pause Music'; }
+  if(musicPlaying){
+    music.pause();
+    musicToggleBtn.textContent = 'Play Music';
+  } else {
+    music.play();
+    musicToggleBtn.textContent = 'Pause Music';
+  }
   musicPlaying = !musicPlaying;
   localStorage.setItem('musicPlaying', musicPlaying);
 });
 
-// ===== Tasks, Notes, Timer =====
-// Keep your existing task, notes, timer JS here (unchanged)
+// ====== TASKS ======
+function loadTasks() {
+  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+  taskList.innerHTML = '';
+  tasks.forEach((task, index)=>{
+    const li = document.createElement('li');
+
+    const span = document.createElement('span');
+    span.textContent = task;
+    span.onclick = () => {
+      span.style.textDecoration = span.style.textDecoration === 'line-through' ? 'none' : 'line-through';
+    };
+    li.appendChild(span);
+
+    const delBtn = document.createElement('button');
+    delBtn.textContent = 'Delete';
+    delBtn.style.marginLeft = '1rem';
+    delBtn.onclick = () => deleteTask(index);
+    li.appendChild(delBtn);
+
+    taskList.appendChild(li);
+  });
+}
+
+function addTask(){
+  const taskText = taskInput.value.trim();
+  if(taskText !== ''){
+    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    tasks.push(taskText);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+    taskInput.value = '';
+    loadTasks();
+  }
+}
+
+function deleteTask(index){
+  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+  tasks.splice(index,1);
+  localStorage.setItem('tasks', JSON.stringify(tasks));
+  loadTasks();
+}
+
+function resetTasks(){
+  if(confirm("Are you sure you want to delete all tasks?")){
+    localStorage.removeItem('tasks');
+    loadTasks();
+  }
+}
+
+loadTasks();
+
+// ====== NOTES ======
+function saveNotes(){
+  localStorage.setItem('notes', notesArea.value);
+  alert("Notes saved!");
+}
+
+notesArea.value = localStorage.getItem('notes') || '';
+
+// ====== TIMER ======
+let timerInterval;
+let remainingTime = 0;
+
+function startTimer(){
+  const minutes = parseInt(document.getElementById('timer-minutes').value);
+  if(isNaN(minutes) || minutes <= 0) return alert("Enter a valid number of minutes");
+  remainingTime = minutes * 60;
+  clearInterval(timerInterval);
+  timerInterval = setInterval(updateTimer, 1000);
+  updateTimer();
+}
+
+function pauseTimer(){ clearInterval(timerInterval); }
+
+function resetTimer(){
+  clearInterval(timerInterval);
+  remainingTime = 0;
+  timerDisplay.textContent = '00:00';
+}
+
+function updateTimer(){
+  if(remainingTime <= 0){
+    clearInterval(timerInterval);
+    timerDisplay.textContent = '00:00';
+    return;
+  }
+  const minutes = Math.floor(remainingTime / 60).toString().padStart(2,'0');
+  const seconds = (remainingTime % 60).toString().padStart(2,'0');
+  timerDisplay.textContent = `${minutes}:${seconds}`;
+  remainingTime--;
+}
+
+// ====== INITIAL MUSIC SETUP ======
+music.volume = 0.5;
+if(musicPlaying){
+  music.play().catch(()=> console.log("User interaction required to start music"));
+}
