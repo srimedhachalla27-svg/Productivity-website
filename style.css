@@ -11,12 +11,11 @@
 body, html {
   font-family:'Helvetica Neue', sans-serif;
   height:100%;
-  background-color: var(--color-background);
   color: var(--color-text);
   overflow-x:hidden;
 }
 
-/* Background video overlay */
+/* Background video */
 #background-video {
   position: fixed;
   top:0; left:0;
@@ -26,29 +25,20 @@ body, html {
   opacity:0.7;
 }
 
-header {
-  text-align:center;
-  padding:2rem 1rem;
-  background-color: rgba(196,197,186,0.8);
-  backdrop-filter: blur(5px);
-  border-bottom:2px solid var(--color-accent);
+/* Overlay panel styles */
+header, section {
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  border-radius: 12px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  max-width: 900px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
+
+header { text-align:center; }
 header h1 { font-size:2.5rem; margin-bottom:0.5rem; }
 header p { font-size:1.2rem; color: var(--color-accent); }
-
-main {
-  max-width:900px;
-  margin:2rem auto;
-  padding:0 1rem;
-}
-
-section {
-  background: rgba(255,255,255,0.85);
-  padding:2rem;
-  margin-bottom:2rem;
-  border-radius:12px;
-  box-shadow:0 4px 10px rgba(0,0,0,0.08);
-}
 
 h2 { color: var(--color-accent); margin-bottom:1rem; font-size:1.8rem; }
 
@@ -64,7 +54,7 @@ ul li {
 }
 ul li:hover { background: var(--color-accent); color:#fff; }
 
-input[type="text"], textarea {
+input[type="text"], textarea, input[type="number"], select {
   width:100%;
   padding:0.8rem;
   margin-bottom:0.5rem;
@@ -89,6 +79,8 @@ button {
 }
 button:hover { background-color: var(--color-button-hover); }
 
+#timer-display { font-size:2rem; margin-top:0.5rem; font-weight:bold; text-align:center; }
+
 footer {
   text-align:center;
   padding:1.5rem;
@@ -98,6 +90,3 @@ footer {
   border-top:2px solid var(--color-accent);
   margin-top:3rem;
 }
-
-/* Timer display */
-#timer-display { font-size:2rem; margin-top:0.5rem; font-weight:bold; text-align:center; }
