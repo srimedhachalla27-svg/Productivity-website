@@ -1,23 +1,26 @@
 // ======= Mood Selector =======
 const moodSelector = document.getElementById('mood-selector');
 const video = document.getElementById('background-video');
+const videoSource = video.querySelector("source");
 const music = document.getElementById('bg-music');
 
 const moods = {
   cozy: { video:'assets/cozy.mp4', music:'assets/cozy.mp3' },
   focus: { video:'assets/focus.mp4', music:'assets/focus.mp3' },
   relaxed: { video:'assets/relaxed.mp4', music:'assets/relaxed.mp3' },
-  energetic: { video:'assets/energetic.mp4', music:'assets/energetic.mp3' },
+  energetic: { video:'assets/energetic.mp4', music:'assets/energetic.mp3' }
 };
 
 moodSelector.addEventListener('change', () => {
   const mood = moods[moodSelector.value];
-  video.src = mood.video;
+
+  videoSource.src = mood.video;
+  video.load();
   video.play();
+
   music.src = mood.music;
   music.play();
 });
-
 // ======= Tasks =======
 const taskList = document.getElementById('task-list');
 const taskInput = document.getElementById('new-task');
