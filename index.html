@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Focus Flights</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>Focus Flights ✈️</h1>
+    <p>Generate focus energy to power anti-gravity travel!</p>
+  </header>
+
+  <main class="dashboard">
+
+    <!-- Next Destination -->
+    <section class="destination">
+      <h2>Next Destination</h2>
+      <p id="destination-name">Tokyo, Japan</p>
+      <div class="progress-bar">
+        <div class="progress" id="progress"></div>
+      </div>
+    </section>
+
+    <!-- Focus Session -->
+    <section class="focus-session">
+      <h2>Start Focus Flight</h2>
+      <button onclick="startFocus(25)">25 min</button>
+      <button onclick="startFocus(50)">50 min</button>
+      <button onclick="startFocus(90)">90 min</button>
+    </section>
+
+    <!-- Stats -->
+    <section class="stats">
+      <h2>Today's Stats</h2>
+      <p id="sessions">Sessions: 0</p>
+      <p id="miles">Miles Earned: 0</p>
+    </section>
+
+    <!-- Flight Animation -->
+    <section class="flight-animation">
+      <div id="plane">✈️</div>
+    </section>
+
+    <!-- Placeholder for travel cards -->
+    <section class="travel-cards">
+      <h2>Unlocked Cards</h2>
+      <div id="cards-container">No cards yet</div>
+    </section>
+
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
