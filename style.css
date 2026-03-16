@@ -1,245 +1,175 @@
-// ====== ELEMENTS ======
-const moodSelector = document.getElementById('mood-selector');
-const video = document.getElementById('background-video');
-const videoSource = video.querySelector('source');
-const music = document.getElementById('bg-music');
-const musicToggleBtn = document.getElementById('music-toggle');
-const headerTitle = document.querySelector('header h1');
-const headerSubtitle = document.querySelector('header p');
-
-const taskList = document.getElementById('task-list');
-const taskInput = document.getElementById('new-task');
-const notesArea = document.getElementById('notes-area');
-const timerDisplay = document.getElementById('timer-display');
-
-let musicPlaying = localStorage.getItem('musicPlaying') !== 'false'; // default true
-
-if (!musicPlaying) {
-  music.pause();
-  musicToggleBtn.textContent = 'Play Music';
+/* ===== ROOT VARIABLES ===== */
+:root {
+  --bg-panel: rgba(255,255,255,0.6);
+  --text-color: #1B1B1B;
+  --accent-color: #595f39;
+  --button-color: #595f39;
+  --button-hover: #454d2f;
 }
 
-// ====== MOOD SETTINGS ======
-const moods = {
-  cozy: {
-    video:'assets/cozy.mp4',
-    music:'assets/cozy.mp3',
-    colors: {
-      '--bg-panel':'rgba(255,255,255,0.6)',
-      '--text-color':'#1B1B1B',
-      '--accent-color':'#595f39',
-      '--button-color':'#595f39',
-      '--button-hover':'#454d2f'
-    },
-    font: "'Helvetica Neue', sans-serif",
-    headerText: "Cozy vibes for deep focus 🔥",
-    subtitle: "Relax and stay productive"
-  },
-  focus: {
-    video:'assets/focus.mp4',
-    music:'assets/focus.mp3',
-    colors: {
-      '--bg-panel':'rgba(240,240,255,0.6)',
-      '--text-color':'#001f3f',
-      '--accent-color':'#0077b6',
-      '--button-color':'#0077b6',
-      '--button-hover':'#005f8f'
-    },
-    font: "'Arial', sans-serif",
-    headerText: "Stay Focused 🎯",
-    subtitle: "Your productivity companion"
-  },
-  relaxed: {
-    video:'assets/relaxed.mp4',
-    music:'assets/relaxed.mp3',
-    colors: {
-      '--bg-panel':'rgba(220,240,240,0.6)',
-      '--text-color':'#0f2143',
-      '--accent-color':'#354e56',
-      '--button-color':'#354e56',
-      '--button-hover':'#243a3e'
-    },
-    font: "'Georgia', serif",
-    headerText: "Relax and Refresh 🌿",
-    subtitle: "Take it slow, stay productive"
-  },
-  energetic: {
-    video:'assets/energetic.mp4',
-    music:'assets/energetic.mp3',
-    colors: {
-      '--bg-panel':'rgba(255,245,230,0.6)',
-      '--text-color':'#663300',
-      '--accent-color':'#ff6f00',
-      '--button-color':'#ff6f00',
-      '--button-hover':'#cc5700'
-    },
-    font: "'Verdana', sans-serif",
-    headerText: "Get Energetic ⚡",
-    subtitle: "Boost your energy and productivity"
+/* ===== RESET ===== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
+  font-family: 'Helvetica Neue', sans-serif;
+  background-color: #E4E4DE;
+  color: var(--text-color);
+  overflow-x: hidden;
+}
+
+/* ===== BACKGROUND VIDEO ===== */
+#background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.7;
+  transition: opacity 0.5s ease;
+}
+
+/* ===== HEADER ===== */
+header {
+  text-align: center;
+  padding: 2rem 1rem;
+  background-color: rgba(255,255,255,0.8);
+  backdrop-filter: blur(5px);
+  border-bottom: 2px solid var(--accent-color);
+}
+header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+header p {
+  font-size: 1.2rem;
+  color: var(--accent-color);
+}
+
+/* ===== MAIN CONTENT ===== */
+main {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* ===== PANELS ===== */
+section {
+  background: var(--bg-panel);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  transition: background 0.5s ease, color 0.5s ease;
+}
+
+h2 {
+  color: var(--accent-color);
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+/* ===== TASK LIST ===== */
+ul {
+  list-style: none;
+  margin-bottom: 1rem;
+  padding-left: 0;
+}
+
+ul li {
+  padding: 0.8rem 1rem;
+  margin-bottom: 0.5rem;
+  background: var(--button-color);
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: 0.2s;
+}
+ul li:hover {
+  background: var(--accent-color);
+}
+
+/* ===== INPUTS ===== */
+input[type="text"], input[type="number"], textarea, select {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--accent-color);
+  font-size: 1rem;
+}
+
+/* ===== TEXTAREA ===== */
+textarea {
+  resize: vertical;
+  padding: 1rem;
+}
+
+/* ===== BUTTONS ===== */
+button {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  background-color: var(--button-color);
+  color: #fff;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: 0.2s;
+  margin-top: 0.5rem;
+  margin-right: 0.5rem;
+}
+button:hover {
+  background-color: var(--button-hover);
+}
+
+/* ===== TIMER DISPLAY ===== */
+#timer-display {
+  font-size: 2rem;
+  margin-top: 0.5rem;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* ===== FOOTER ===== */
+footer {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--button-color);
+  color: var(--accent-color);
+  font-size: 0.9rem;
+  border-top: 2px solid var(--accent-color);
+  margin-top: 3rem;
+}
+
+/* ===== SELECT (MOOD) ===== */
+#mood-selector {
+  font-size: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid var(--accent-color);
+  margin-bottom: 1rem;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  header h1 {
+    font-size: 2rem;
   }
-};
-
-// ====== MOOD CHANGE ======
-moodSelector.addEventListener('change', () => {
-  const mood = moods[moodSelector.value];
-
-  // Video fade
-  video.style.opacity = 0;
-  setTimeout(()=>{
-    videoSource.src = mood.video;
-    video.load();
-    video.play();
-    video.style.opacity = 0.7;
-  }, 500);
-
-  // Music fade
-  fadeOutMusic(music, 500, ()=>{
-    music.src = mood.music;
-    if(musicPlaying) music.play();
-    fadeInMusic(music, 500);
-  });
-
-  // Colors & font
-  for(let prop in mood.colors){
-    document.documentElement.style.setProperty(prop, mood.colors[prop]);
+  header p {
+    font-size: 1rem;
   }
-  document.body.style.fontFamily = mood.font;
-
-  // Header text
-  headerTitle.textContent = mood.headerText;
-  headerSubtitle.textContent = mood.subtitle;
-});
-
-// ====== MUSIC FADE HELPERS ======
-function fadeOutMusic(audio, duration, callback){
-  const step = audio.volume / (duration / 50);
-  const fade = setInterval(()=>{
-    if(audio.volume - step <= 0){
-      audio.volume = 0;
-      clearInterval(fade);
-      if(callback) callback();
-    } else audio.volume -= step;
-  },50);
-}
-
-function fadeInMusic(audio, duration){
-  audio.volume = 0;
-  const step = 1 / (duration / 50);
-  const fade = setInterval(()=>{
-    if(audio.volume + step >= 1){
-      audio.volume = 1;
-      clearInterval(fade);
-    } else audio.volume += step;
-  },50);
-}
-
-// ====== MUSIC TOGGLE ======
-musicToggleBtn.addEventListener('click', ()=>{
-  if(musicPlaying){
-    music.pause();
-    musicToggleBtn.textContent = 'Play Music';
-  } else {
-    music.play();
-    musicToggleBtn.textContent = 'Pause Music';
+  section {
+    padding: 1.5rem;
   }
-  musicPlaying = !musicPlaying;
-  localStorage.setItem('musicPlaying', musicPlaying);
-});
-
-// ====== TASKS ======
-function loadTasks() {
-  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  taskList.innerHTML = '';
-  tasks.forEach((task, index)=>{
-    const li = document.createElement('li');
-
-    const span = document.createElement('span');
-    span.textContent = task;
-    span.onclick = () => {
-      span.style.textDecoration = span.style.textDecoration === 'line-through' ? 'none' : 'line-through';
-    };
-    li.appendChild(span);
-
-    const delBtn = document.createElement('button');
-    delBtn.textContent = 'Delete';
-    delBtn.style.marginLeft = '1rem';
-    delBtn.onclick = () => deleteTask(index);
-    li.appendChild(delBtn);
-
-    taskList.appendChild(li);
-  });
-}
-
-function addTask(){
-  const taskText = taskInput.value.trim();
-  if(taskText !== ''){
-    const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    tasks.push(taskText);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-    taskInput.value = '';
-    loadTasks();
+  #timer-display {
+    font-size: 1.5rem;
   }
-}
-
-function deleteTask(index){
-  const tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-  tasks.splice(index,1);
-  localStorage.setItem('tasks', JSON.stringify(tasks));
-  loadTasks();
-}
-
-function resetTasks(){
-  if(confirm("Are you sure you want to delete all tasks?")){
-    localStorage.removeItem('tasks');
-    loadTasks();
-  }
-}
-
-loadTasks();
-
-// ====== NOTES ======
-function saveNotes(){
-  localStorage.setItem('notes', notesArea.value);
-  alert("Notes saved!");
-}
-
-notesArea.value = localStorage.getItem('notes') || '';
-
-// ====== TIMER ======
-let timerInterval;
-let remainingTime = 0;
-
-function startTimer(){
-  const minutes = parseInt(document.getElementById('timer-minutes').value);
-  if(isNaN(minutes) || minutes <= 0) return alert("Enter a valid number of minutes");
-  remainingTime = minutes * 60;
-  clearInterval(timerInterval);
-  timerInterval = setInterval(updateTimer, 1000);
-  updateTimer();
-}
-
-function pauseTimer(){ clearInterval(timerInterval); }
-
-function resetTimer(){
-  clearInterval(timerInterval);
-  remainingTime = 0;
-  timerDisplay.textContent = '00:00';
-}
-
-function updateTimer(){
-  if(remainingTime <= 0){
-    clearInterval(timerInterval);
-    timerDisplay.textContent = '00:00';
-    return;
-  }
-  const minutes = Math.floor(remainingTime / 60).toString().padStart(2,'0');
-  const seconds = (remainingTime % 60).toString().padStart(2,'0');
-  timerDisplay.textContent = `${minutes}:${seconds}`;
-  remainingTime--;
-}
-
-// ====== INITIAL MUSIC SETUP ======
-music.volume = 0.5;
-if(musicPlaying){
-  music.play().catch(()=> console.log("User interaction required to start music"));
 }
